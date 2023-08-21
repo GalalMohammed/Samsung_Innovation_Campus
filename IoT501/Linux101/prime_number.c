@@ -6,7 +6,7 @@ int main(){
 
 	printf("Enter x: ");
 	scanf("%d", &x);
-	for (int i = 2; i <= x / 2; i++)
+	for (int i = 2; i * i <= x; i++)
 	{
 		if (x % i == 0)
 		{
