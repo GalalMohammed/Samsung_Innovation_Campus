@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+read -r -p "Enter x: " x
+read -r -p "Enter op: " op
+read -r -p "Enter y: " y
+if [ "$op" == + ];
+then
+	echo "$x"+"$y"=$((x+y))
+elif [ "$op" == - ];
+then
+	echo "$x"-"$y"=$((x-y))
+elif [ "$op" == "*" ];
+then
+	echo "$x"*"$y"=$((x*y))
+elif [ "$op" == / ] && [ "$y" -ne 0 ];
+then
+	echo "$x"/"$y"=$((x/y))
+fi
