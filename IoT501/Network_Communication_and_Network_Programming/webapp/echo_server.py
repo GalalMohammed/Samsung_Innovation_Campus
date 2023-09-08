@@ -28,7 +28,7 @@ if __name__ == '__main__':
                     data = data.__repr__()
                     sock.sendto(data.encode(), address)
                 elif data.decode()[:6] == 'INSERT':
-                    row = Client(name=data.decode()[6:])
+                    row = Client(name=data.decode()[7:])
                     session.add(row)
                     session.commit()
             else:
