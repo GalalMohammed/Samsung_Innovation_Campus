@@ -23,8 +23,7 @@ if __name__ == '__main__':
     def insert():
         if request.method == 'POST':
             name = request.form['name']
-            id = request.form['id']
-            message = 'INSERT ' + id + ' ' + name
+            message = 'INSERT ' + name
             message.encode()
             sock.sendall(message)
             return redirect('/')

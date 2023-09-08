@@ -2,7 +2,7 @@
 import socket
 
 if __name__ == '__main__':
-    from models.model import Client
+    from models.model import Base, Client
     from sqlalchemy import create_engine
     from sqlalchemy.orm import sessionmaker
 
@@ -17,6 +17,7 @@ if __name__ == '__main__':
     sock.listen(1)
 
     engine = create_engine('mysql+mysqldb://root@localhost/mysql')
+    Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     session = Session()
 
