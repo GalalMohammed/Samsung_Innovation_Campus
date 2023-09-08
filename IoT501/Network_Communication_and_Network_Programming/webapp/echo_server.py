@@ -6,39 +6,33 @@ if __name__ == '__main__':
     from sqlalchemy import create_engine
     from sqlalchemy.orm import sessionmaker
 
-    # Create a TCP/IP socket
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # Create a UDP/IP socket
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     # Bind the socket to the port
     server_address = ('192.168.56.102', 999)
     sock.bind(server_address)
-
-    # Listen for incoming connections
-    sock.listen(1)
 
     engine = create_engine('mysql+mysqldb://root@localhost/mysql')
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    while True:
-        # Wait for a connection
-        connection, client_address = sock.accept()
-        try:
-            # Receive the data in small chunks
-            while True:
-                data = connection.recv(16)
-                if data:
-                    if data.decode() == 'SELECT':
-                        data = [obj.name for obj in session.query(Client).all()]
-                        data = data.__repr__()
-                        connection.sendall(data.encode())
-                    elif data.decode()[:6] == 'INSERT':
-                        row = Client(name=data.decode()[6:].split()[1], id=int(data.decode()[6:].split()[0]))
-                        session.add(row)
-                        session.commit()
-                else:
-                    break
-        finally:
-            # Clean up the connection
-            sock.close()
+    try:
+        # Receive the data in small chunks
+        while True:
+            data, address = sock.recvfrom(4096)
+            if data:
+                if data.decode() == 'SELECT':
+                    data = [obj.name for obj in session.query(Client).all()]
+                    data = data.__repr__()
+                    sock.sendto(data.encode(), address)
+                elif data.decode()[:6] == 'INSERT':
+                    row = Client(name=data.decode()[6:])
+                    session.add(row)
+                    session.commit()
+            else:
+                break
+    finally:
+        # Clean up the connection
+        sock.close()
