@@ -29,10 +29,11 @@ if __name__ == '__main__':
                 data = connection.recv(16)
                 if data:
                     if data.decode() == 'SELECT':
-                        data = session.query(Client).all()
-                        connection.sendall(data.__repr__())
+                        data = [obj.name for obj in session.query(Client).all()]
+                        data = data.__repr__()
+                        connection.sendall(data.encode())
                     elif data.decode()[:6] == 'INSERT':
-                        row = Client(name=data.decode()[6:])
+                        row = Client(name=data.decode()[6:].split()[1], id=int(data.decode()[6:].split()[0]))
                         session.add(row)
                         session.commit()
                 else:
