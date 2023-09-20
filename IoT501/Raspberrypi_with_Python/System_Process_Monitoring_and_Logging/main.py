@@ -20,7 +20,7 @@ while True:
 while True:
     date = str(datetime.today().date())
     with open(f"{date}-pub.log", 'a') as log:
-        log.write("datetime, cpu-usage, number-of-logical-CPUs-used, used-memory, used-disk-space, current-host-ip\n")
+        log.write("datetime,cpu-usage,number-of-logical-CPUs-used,used-memory,used-disk-space,current-host-ip\n")
         while True:
             log.write(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}, {psutil.cpu_percent(interval)},"
                       + f" {psutil.cpu_count()}, {psutil.virtual_memory().used}, {psutil.disk_usage('C:').used},"
